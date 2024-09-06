@@ -1,0 +1,37 @@
+.task-input {
+    h1 {
+        text-align: center;
+    }
+
+    &__row {
+        display: flex;
+        height: 42px;
+        gap: 4px;
+        margin: 20px 0;
+
+        input {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 0 14px;
+            font-size: 1.6rem;
+
+            &:focus {
+                border-color: #77dae6;
+            }
+        }
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+            &:hover {
+                border-color: #77dae6;
+            }
+        }
+    }
+}
