@@ -1,19 +1,23 @@
 import classNames from 'classnames/bind';
-import styles from './todoList.module.scss';
-import TaskInput from '../TaskInput';
-import TaskList from '../TaskList';
 import { useState } from 'react';
+import styles from './todoList.module.scss';
 import { TodoListType } from '~/@types/Todo';
+import TaskInput from '~/components/TaskInput';
+import TaskList from '~/components/TaskList';
 
 const cx = classNames.bind(styles);
 
 function TodoList() {
-    const [todos, setTodos] = useState<TodoListType[]>([]);
-    console.log(todos);
+    const [todos, setTodos] = useState<TodoListType[]>(() => {
+        const storageTodos = localStorage.getItem('todos');
+        const initTodos = JSON.parse(storageTodos || '[]');
+        return initTodos;
+    });
+
     const [currentTodo, setCurrenTodo] = useState<TodoListType | null>(null);
 
-    const notDoneTodos = todos.filter((todo) => !todo.done);
     const doneTodos = todos.filter((todo) => todo.done);
+    const notDoneTodos = todos.filter((todo) => !todo.done);
 
     const addTodo = (name: string) => {
         setTodos((prev) => {
@@ -22,11 +26,14 @@ function TodoList() {
                 done: false,
                 name,
             };
-            return [...prev, todo];
+            const newTodos = [...prev, todo];
+            const todosJson = JSON.stringify(newTodos);
+            localStorage.setItem('todos', todosJson);
+            return newTodos;
         });
     };
 
-    const StartEditTodo = (id: string) => {
+    const startEditTodo = (id: string) => {
         const todo = todos.find((todo) => todo.id === id);
         if (todo) {
             setCurrenTodo(todo);
@@ -36,10 +43,13 @@ function TodoList() {
     const editTodo = (name: string) => {
         setCurrenTodo((prev) => {
             if (prev) {
-                return {
+                const newTodos = {
                     ...prev,
                     name,
                 };
+                const todosJson = JSON.stringify(newTodos);
+                localStorage.setItem('todos', todosJson);
+                return newTodos;
             }
             return null;
         });
@@ -47,32 +57,30 @@ function TodoList() {
 
     const handleUpdateTodo = () => {
         setTodos((prev) => {
-            return prev.map((todo) => {
-                if (todo.id === currentTodo?.id) {
-                    return currentTodo;
-                }
-                return todo;
-            });
+            const newTodos = prev.map((todo) => (todo.id === currentTodo?.id ? currentTodo : todo));
+            const todosJson = JSON.stringify(newTodos);
+            localStorage.setItem('todos', todosJson);
+            return newTodos;
         });
         setCurrenTodo(null);
     };
+
     const deleteTodo = (id: string) => {
-        const newTodos = todos.filter((todo) => todo.id !== id);
         setTodos((prev) => {
+            const newTodos = todos.filter((todo) => todo.id !== id);
+            const todosJson = JSON.stringify(newTodos);
+            localStorage.setItem('todos', todosJson);
             return newTodos;
         });
         setCurrenTodo(null);
     };
 
     const handleCheck = (id: string) => {
-        console.log(id);
         setTodos((prev) => {
-            return prev.map((todo) => {
-                if (todo.id === id) {
-                    return { ...todo, done: !todo.done };
-                }
-                return todo;
-            });
+            const newTodos = prev.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo));
+            const todosJson = JSON.stringify(newTodos);
+            localStorage.setItem('todos', todosJson);
+            return newTodos;
         });
     };
 
@@ -87,14 +95,14 @@ function TodoList() {
             <TaskList
                 DoneTodo={false}
                 ListTodo={notDoneTodos}
-                StartEditTodo={StartEditTodo}
+                startEditTodo={startEditTodo}
                 deleteTodo={deleteTodo}
                 handleCheck={handleCheck}
             />
             <TaskList
                 DoneTodo
                 ListTodo={doneTodos}
-                StartEditTodo={StartEditTodo}
+                startEditTodo={startEditTodo}
                 deleteTodo={deleteTodo}
                 handleCheck={handleCheck}
             />

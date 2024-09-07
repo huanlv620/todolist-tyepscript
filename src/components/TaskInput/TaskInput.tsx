@@ -1,27 +1,23 @@
 import classNames from 'classnames/bind';
-import styles from './taskInput.module.scss';
 import { useState } from 'react';
+import styles from './taskInput.module.scss';
 import { TodoListType } from '~/@types/Todo';
 
 const cx = classNames.bind(styles);
 
 interface TaskInputType {
-    addTodo: (name: string) => void;
     currentTodo: TodoListType | null;
+    addTodo: (name: string) => void;
     editTodo: (name: string) => void;
     handleUpdateTodo: () => void;
 }
 
 function TaskInput(props: TaskInputType) {
     const { addTodo, currentTodo, editTodo, handleUpdateTodo } = props;
-    const [name, setName] = useState('');
-    console.log(name);
+    const [name, setName] = useState<string>('');
+
     const handleChangInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (currentTodo) {
-            editTodo(e.target.value);
-        } else {
-            setName(e.target.value);
-        }
+        currentTodo ? editTodo(e.target.value) : setName(e.target.value);
     };
 
     const handleAddTodo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

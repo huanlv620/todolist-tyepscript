@@ -6,12 +6,13 @@ const cx = classNames.bind(styles);
 interface TaskListType {
     DoneTodo: boolean;
     ListTodo: TodoListType[];
-    StartEditTodo: (name: string) => void;
+    startEditTodo: (name: string) => void;
     deleteTodo: (id: string) => void;
     handleCheck: (id: string) => void;
 }
 function TaskList(props: TaskListType) {
-    const { DoneTodo, ListTodo, StartEditTodo, deleteTodo, handleCheck } = props;
+    const { DoneTodo, ListTodo, startEditTodo, deleteTodo, handleCheck } = props;
+
     return (
         <div className={cx('task-list')}>
             <h2>{DoneTodo ? 'Hoàn thành' : 'Chưa hoàn thành'}</h2>
@@ -34,7 +35,7 @@ function TaskList(props: TaskListType) {
                     <div className={cx('task-list__actions')}>
                         <button
                             onClick={() => {
-                                StartEditTodo(todo.id);
+                                startEditTodo(todo.id);
                             }}
                         >
                             🖋️
