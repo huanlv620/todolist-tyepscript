@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
-import styles from './taskInput.module.scss';
 import { TodoListType } from '~/@types/Todo';
+import styles from './taskInput.module.scss';
+import { TodoTypes } from '~/PropTypes/todo.proptypes';
 
 const cx = classNames.bind(styles);
 
@@ -47,3 +49,10 @@ function TaskInput(props: TaskInputType) {
 }
 
 export default TaskInput;
+
+TaskInput.propTypes = {
+    addTodo: PropTypes.func.isRequired,
+    editTodo: PropTypes.func.isRequired,
+    handleUpdateTodo: PropTypes.func.isRequired,
+    currentTodo: PropTypes.oneOfType([TodoTypes, PropTypes.oneOf([null])]),
+};

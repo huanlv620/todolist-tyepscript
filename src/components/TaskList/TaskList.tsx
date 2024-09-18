@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import styles from './TaskList.module.scss';
 import { TodoListType } from '~/@types/Todo';
+import { TodoTypes } from '~/PropTypes/todo.proptypes';
+import styles from './TaskList.module.scss';
 
 const cx = classNames.bind(styles);
 interface TaskListType {
@@ -55,3 +57,11 @@ function TaskList(props: TaskListType) {
 }
 
 export default TaskList;
+
+TaskList.propTypes = {
+    DoneTodo: PropTypes.bool,
+    ListTodo: PropTypes.arrayOf(TodoTypes),
+    startEditTodo: PropTypes.func.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
+    handleCheck: PropTypes.func.isRequired,
+};
